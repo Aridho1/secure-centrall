@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SecureCentral - Reseller Application Indonesia | Form SC-RSL-ID v1.0</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'sc-gold': '#C8A046',
+          'sc-gold-light': '#E8C879',
+          'sc-gold-bg': '#fff8e6',
+          'sc-red': '#C8102E',
+          'sc-red-dark': '#9B0D24',
+          'sc-black': '#1a1a1a',
+          'sc-gray': '#595959',
+          'sc-gray-light': '#8c8c8c',
+          'sc-border': '#d4d4d4',
+          'sc-bg': '#f7f7f7',
+        }
+      }
+    }
+  }
+</script>
+<style>
+  @page {
+    size: A4 portrait;
+    margin: 14mm 14mm 18mm 14mm;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    font-family: Helvetica, Arial, sans-serif;
+    color: #1a1a1a;
+    font-size: 9.5pt;
+    line-height: 1.4;
+  }
+  body {
+    background: #e5e5e5;
+    padding: 24px 0;
+  }
+  .page {
+    background: white;
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto 10mm auto;
+    padding: 14mm 14mm 18mm 14mm;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+
+  @media print {
+    body { background: white; padding: 0; }
+    .page {
+      box-shadow: none;
+      margin: 0;
+      padding: 0;
+      width: auto;
+      min-height: 265mm;
+      display: flex;
+      flex-direction: column;
+      page-break-after: always;
+      break-after: page;
+    }
+    .page:last-child { page-break-after: auto; break-after: auto; }
+    .no-print { display: none !important; }
+  }
+
+  /* Custom checkbox */
+  .sc-check {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 13px;
+    height: 13px;
+    border: 1.5px solid #1a1a1a;
+    border-radius: 2px;
+    vertical-align: middle;
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+    background: white;
+    transition: all .15s;
+  }
+  .sc-check:checked {
+    background: #C8102E;
+    border-color: #C8102E;
+  }
+  .sc-check:checked::after {
+    content: "";
+    position: absolute;
+    top: 1px;
+    left: 4px;
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  /* Inputs */
+  .sc-input {
+    background-color: #fafafa;
+    border: 1px solid #d4d4d4;
+    border-radius: 2px;
+    padding: 3px 6px;
+    width: 100%;
+    font-size: 9.5pt;
+    font-family: inherit;
+    color: #1a1a1a;
+    height: 22px;
+    outline: none;
+  }
+  .sc-input:focus {
+    outline: 1.5px solid #C8A046;
+    background-color: white;
+    border-color: #C8A046;
+  }
+  textarea.sc-input {
+    height: auto;
+    min-height: 36px;
+    resize: vertical;
+    padding: 4px 6px;
+    line-height: 1.3;
+  }
+  select.sc-input { cursor: pointer; }
+
+  /* Section header */
+  .section-header {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 6px;
+  }
+  .section-badge {
+    background: #C8A046;
+    color: #1a1a1a;
+    font-weight: bold;
+    padding: 4px 12px;
+    font-size: 13pt;
+    display: flex;
+    align-items: center;
+    min-width: 28px;
+    justify-content: center;
+  }
+  .section-title {
+    flex: 1;
+    padding: 3px 10px;
+    background: #1a1a1a;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .section-title .en {
+    font-weight: bold;
+    font-size: 10pt;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .section-title .id {
+    font-size: 9pt;
+    color: #E8C879;
+    font-style: italic;
+  }
+
+  /* Subsection */
+  .subsection {
+    background: #f0ebe0;
+    border-left: 4px solid #C8A046;
+    padding: 4px 10px;
+    margin: 8px 0 6px 0;
+    font-size: 10pt;
+    font-weight: bold;
+    color: #1a1a1a;
+  }
+  .subsection .id {
+    color: #595959;
+    font-weight: normal;
+    font-style: italic;
+    margin-left: 6px;
+  }
+
+  /* Field labels */
+  .field-label {
+    font-size: 8.5pt;
+    color: #595959;
+    margin-bottom: 2px;
+    display: block;
+    line-height: 1.2;
+  }
+  .field-label .req {
+    color: #C8102E;
+    font-weight: bold;
+  }
+
+  /* Tables */
+  table.sc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8.5pt;
+    table-layout: fixed;
+  }
+  table.sc-table th {
+    background: #1a1a1a;
+    color: white;
+    padding: 4px 6px;
+    text-align: left;
+    font-size: 8.5pt;
+    font-weight: 600;
+    border: 1px solid #1a1a1a;
+    line-height: 1.2;
+  }
+  table.sc-table td {
+    padding: 1px;
+    border: 1px solid #d4d4d4;
+    background: white;
+    vertical-align: top;
+  }
+  table.sc-table td input,
+  table.sc-table td textarea {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 8.5pt;
+    padding: 3px 5px;
+    font-family: inherit;
+    color: #1a1a1a;
+    outline: none;
+    min-height: 20px;
+  }
+  table.sc-table td input:focus,
+  table.sc-table td textarea:focus {
+    background: #faf6e8;
+  }
+
+  /* Footer */
+  .page-footer {
+    border-top: 1px solid #d4d4d4;
+    padding-top: 4px;
+    font-size: 7.5pt;
+    color: #595959;
+    margin-top: auto;
+  }
+  .page-footer .row1 {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2px;
+  }
+  .page-footer .row2 {
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* Logo */
+  .sc-logo { max-height: 50px; width: auto; }
+
+  /* Print button */
+  .toolbar {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+    display: flex;
+    gap: 8px;
+  }
+  .print-btn, .reset-btn {
+    padding: 10px 18px;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    font-size: 10pt;
+    font-family: inherit;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .print-btn {
+    background: #C8102E;
+    color: white;
+    box-shadow: 0 4px 12px rgba(200,16,46,0.4);
+  }
+  .print-btn:hover { background: #9B0D24; }
+  .reset-btn {
+    background: white;
+    color: #1a1a1a;
+    border: 1px solid #d4d4d4;
+  }
+  .reset-btn:hover { background: #f7f7f7; }
+
+  /* Add row button */
+  .add-row-btn {
+    background: #C8A046;
+    color: #1a1a1a;
+    padding: 2px 10px;
+    border-radius: 3px;
+    font-size: 8pt;
+    cursor: pointer;
+    border: 1px solid #a07d2f;
+    font-weight: 600;
+    margin-top: 2px;
+  }
+  .add-row-btn:hover { background: #a07d2f; color: white; }
+
+  /* Note box */
+  .note-box {
+    background: #fff8e6;
+    border-left: 3px solid #C8A046;
+    padding: 4px 8px;
+    font-size: 8.5pt;
+    margin: 4px 0;
+    color: #595959;
+  }
+
+  /* Declaration text */
+  .declaration-box {
+    background: #f7f7f7;
+    border: 1px solid #d4d4d4;
+    padding: 8px 10px;
+    font-size: 9pt;
+    margin: 6px 0;
+  }
+
+  /* Signature area */
+  .signature-box {
+    border: 1.5px dashed #595959;
+    min-height: 110px;
+    padding: 8px;
+    text-align: center;
+    font-size: 8pt;
+    color: #8c8c8c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fcfcfc;
+  }
+
+  /* Internal use */
+  .internal-use {
+    background: #fff8e6;
+    border: 1.5px solid #C8A046;
+    padding: 10px;
+    margin-top: 10px;
+  }
+  .internal-use-title {
+    font-size: 9pt;
+    font-weight: bold;
+    color: #9B0D24;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #C8A046;
+    padding-bottom: 3px;
+  }
+
+  /* Clause */
+  .clause {
+    font-size: 8.5pt;
+    margin-bottom: 3px;
+    line-height: 1.35;
+  }
+  .clause .num {
+    font-weight: bold;
+    color: #1a1a1a;
+  }
+
+  /* Info banner */
+  .info-banner {
+    max-width: 210mm;
+    margin: 0 auto 10mm;
+    padding: 10px 14px;
+    background: #fff8e6;
+    border: 1px solid #C8A046;
+    border-radius: 4px;
+    font-size: 9pt;
+    color: #595959;
+  }
+  .info-banner strong { color: #1a1a1a; }
+</style>
+</head>
+<body>
+
+<div class="toolbar no-print">
+  <button class="print-btn" onclick="window.print()">🖨️ Print / Save as PDF</button>
+  <button class="reset-btn" onclick="if(confirm('Reset semua data form?')) location.reload()">↺ Reset</button>
+</div>
+
+<div class="info-banner no-print">
+  <strong>📋 Petunjuk:</strong> Isi formulir ini secara digital, lalu klik tombol <strong>Print / Save as PDF</strong> di pojok kanan atas. Pada dialog print, pilih <em>Save as PDF</em> sebagai destinasi, paper size <em>A4</em>, margins <em>Default</em>, dan centang <em>Background graphics</em> agar warna header section tetap muncul.
+</div>
+
+<!-- ============ PAGE 1 ============ -->
+<div class="page">
+  <div class="flex justify-between items-start gap-4 mb-3 pb-2 border-b-2 border-sc-red">
+    <img src="https://static.wixstatic.com/media/9acedb_c7b8400d2f73408489f86e2de5d1e291~mv2.jpg/v1/fill/w_582,h_98,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/securecentrallogo_26v2.jpg" alt="SecureCentral" class="sc-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+    <div style="display:none;" class="text-2xl font-bold"><span style="color:#1a1a1a">SECURE</span><span style="color:#C8102E">CENTRAL</span></div>
+    <div class="text-right text-[9pt] leading-tight">
+      <div class="font-bold text-sc-black text-[11pt]">RESELLER APPLICATION FORM - INDONESIA</div>
+      <div>Formulir Aplikasi Mitra Reseller</div>
+      <div class="text-sc-red font-semibold">Form SC-RSL-ID v1.0</div>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <h1 class="text-[14pt] font-bold text-sc-black leading-tight">Reseller / Partner Application</h1>
+    <p class="text-[9pt] italic text-sc-gray">Republic of Indonesia / Formulir Pendaftaran Mitra Reseller Indonesia</p>
+  </div>
+
+  <p class="text-[9pt] leading-snug mb-2">
+    SecureCentral Global Pty Ltd (ABN 45 690 139 872) appoints authorised resellers across Asia Pacific for our software portfolio covering IT Service Management, IT Asset Management, Cybersecurity and Remote Control. Please complete every section in full. Applications submitted without the required legal and tax information cannot be processed.
+  </p>
+  <p class="text-[8.5pt] italic text-sc-gray leading-snug mb-3">
+    Mohon lengkapi seluruh bagian formulir ini. Permohonan tanpa data legalitas dan perpajakan tidak dapat diproses.
+  </p>
+
+  <div class="subsection">Submission <span class="id">/ Pengiriman</span></div>
+  <p class="text-[8.5pt] mb-3 leading-snug">
+    Return the completed form to <span class="text-sc-red font-semibold">partner@securecentral.net</span> (subject: "Reseller Application - Indonesia - [Company Name]"). SecureCentral targets a decision within 10 business days of receiving a complete application. All information is treated as confidential under our Privacy Policy (www.securecentral.net/privacy-policy).
+  </p>
+
+  <!-- Section A -->
+  <div class="section-header">
+    <div class="section-badge">A</div>
+    <div class="section-title">
+      <span class="en">APPLICANT DETAILS</span>
+      <span class="id">Rincian Pemohon</span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3 mb-3">
+    <div>
+      <label class="field-label">Date of application <span class="req">*</span> (Tanggal)</label>
+      <input type="date" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">SecureCentral contact / referred by (Jika ada)</label>
+      <input type="text" class="sc-input">
+    </div>
+  </div>
+
+  <div class="field-label mb-1.5">Solution areas of interest <span class="italic text-sc-gray-light">/ Bidang solusi yang diminati</span></div>
+  <div class="grid grid-cols-2 gap-x-6 gap-y-1 mb-3 text-[9pt]">
+    <label class="flex items-center gap-2"><input type="checkbox" class="sc-check"> IT Service Management (ITSM)</label>
+    <label class="flex items-center gap-2"><input type="checkbox" class="sc-check"> RMM & PSA</label>
+    <label class="flex items-center gap-2"><input type="checkbox" class="sc-check"> IT Asset Management (ITAM)</label>
+    <label class="flex items-center gap-2"><input type="checkbox" class="sc-check"> Compliance & Risk</label>
+    <label class="flex items-center gap-2"><input type="checkbox" class="sc-check"> Cybersecurity</label>
+    <label class="flex items-center gap-2"><input type="checkbox" class="sc-check"> Observability & Monitoring</label>
+    <label class="flex items-center gap-2"><input type="checkbox" class="sc-check"> Remote Control & Remote Support</label>
+    <label class="flex items-center gap-2"><input type="checkbox" class="sc-check"> Unified Endpoint Management (UEM)</label>
+  </div>
+
+  <div class="mb-3">
+    <label class="field-label">Other solutions of interest / notes <span class="italic text-sc-gray-light">(Solusi lain)</span></label>
+    <textarea class="sc-input" rows="2"></textarea>
+  </div>
+
+  <!-- Section B -->
+  <div class="section-header">
+    <div class="section-badge">B</div>
+    <div class="section-title">
+      <span class="en">COMPANY LEGAL INFORMATION</span>
+      <span class="id">Informasi Legalitas Perusahaan</span>
+    </div>
+  </div>
+
+  <p class="text-[8.5pt] italic mb-2 leading-snug">
+    Enter the company name exactly as stated in the Deed of Establishment (Akta Pendirian) and Ministry of Law approval (SK Kemenkumham).
+  </p>
+
+  <div class="grid grid-cols-2 gap-3 mb-2">
+    <div>
+      <label class="field-label">Full legal entity name <span class="req">*</span> (Nama badan hukum sesuai akta)</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Trading / brand name (Nama dagang)</label>
+      <input type="text" class="sc-input">
+    </div>
+  </div>
+
+  <div class="mb-2">
+    <span class="field-label">Legal form / Bentuk badan usaha</span>
+    <div class="flex gap-5 text-[9pt] mt-0.5">
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> PT (Perseroan Terbatas)</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> CV (Commanditaire Vennootschap)</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Sole Trader / Perorangan</label>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-3 mb-2">
+    <div>
+      <label class="field-label">Deed of Establishment No. <span class="req">*</span> (Akta Pendirian)</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Notary name & city (Nama notaris)</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Latest Amendment Deed No. & date</label>
+      <input type="text" class="sc-input">
+    </div>
+  </div>
+
+  <div class="grid grid-cols-4 gap-3 mb-2">
+    <div>
+      <label class="field-label">SK Kemenkumham (MoLHR Decree) No. <span class="req">*</span></label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Date of SK Kemenkumham</label>
+      <input type="date" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Year established</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Paid-up capital (IDR) (Modal disetor)</label>
+      <input type="text" class="sc-input">
+    </div>
+  </div>
+
+  <div class="mb-2">
+    <label class="field-label">Registered address (Alamat sesuai akta/NIB) <span class="req">*</span></label>
+    <textarea class="sc-input" rows="2"></textarea>
+  </div>
+
+  <div class="grid grid-cols-4 gap-3 mb-2">
+    <div>
+      <label class="field-label">City / Kota</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Province / Provinsi</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Postcode / Kode Pos</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Country</label>
+      <input type="text" class="sc-input" value="Indonesia">
+    </div>
+  </div>
+
+  <div class="mb-2">
+    <label class="field-label">Operating / warehouse address (if different) (Alamat operasional)</label>
+    <textarea class="sc-input" rows="2"></textarea>
+  </div>
+
+  <div class="grid grid-cols-4 gap-3 mb-2">
+    <div>
+      <label class="field-label">Company phone</label>
+      <input type="tel" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Company email (official) <span class="req">*</span></label>
+      <input type="email" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Website</label>
+      <input type="url" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Number of employees</label>
+      <input type="number" class="sc-input">
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="row1">
+      <span>SecureCentral Global Pty Ltd | ABN 45 690 139 872 | ACN 690 139 872 | partner@securecentral.net | www.securecentral.net</span>
+      <span>Page 1</span>
+    </div>
+    <div class="row2">Reseller Application - Indonesia | Form SC-RSL-ID v1.0 | Confidential when completed</div>
+  </div>
+</div>
+
+<!-- ============ PAGE 2 ============ -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-badge">C</div>
+    <div class="section-title">
+      <span class="en">BUSINESS REGISTRATION NUMBERS</span>
+      <span class="id">Nomor Legalitas Usaha</span>
+    </div>
+  </div>
+
+  <p class="text-[8.5pt] italic mb-2 leading-snug">
+    NIB is the 13-digit Business Identification Number issued via the OSS system. Complete the licences that apply to your business.
+  </p>
+
+  <div class="grid grid-cols-3 gap-3 mb-2">
+    <div>
+      <label class="field-label">NIB (Nomor Induk Berusaha) <span class="req">*</span> (13 digit)</label>
+      <input type="text" class="sc-input" maxlength="13" pattern="\d{13}">
+    </div>
+    <div>
+      <label class="field-label">NIB issue date</label>
+      <input type="date" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">KBLI code(s) (mis. 46512, 62019)</label>
+      <input type="text" class="sc-input">
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-3 mb-4">
+    <div>
+      <label class="field-label">Business licence / Izin Usaha No.</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Certificate of Domicile (SKDP/SKDU)</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Other permits / certifications (mis. ISO 27001)</label>
+      <input type="text" class="sc-input">
+    </div>
+  </div>
+
+  <!-- Section D -->
+  <div class="section-header">
+    <div class="section-badge">D</div>
+    <div class="section-title">
+      <span class="en">DIRECTORS</span>
+      <span class="id">Direksi</span>
+    </div>
+  </div>
+
+  <p class="text-[8.5pt] italic mb-2 leading-snug">
+    List the directors appearing on the current Deed / SK Kemenkumham who are authorised to represent the company.
+  </p>
+
+  <div x-data="{ rows: [{},{},{}] }">
+    <table class="sc-table mb-1">
+      <thead>
+        <tr>
+          <th style="width:22%">Full name (as per KTP)</th>
+          <th style="width:13%">Position / Jabatan</th>
+          <th style="width:18%">NIK (KTP) or Passport No.</th>
+          <th style="width:16%">Personal NPWP</th>
+          <th style="width:11%">Nationality</th>
+          <th style="width:20%">Mobile / Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        <template x-for="(row, idx) in rows" :key="idx">
+          <tr>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+    <button type="button" class="add-row-btn no-print" @click="rows.push({})">+ Add row</button>
+  </div>
+
+  <!-- Section E -->
+  <div class="section-header mt-4">
+    <div class="section-badge">E</div>
+    <div class="section-title">
+      <span class="en">TAX RESIDENCY & TAX INFORMATION</span>
+      <span class="id">Domisili Pajak & Informasi Perpajakan</span>
+    </div>
+  </div>
+
+  <p class="text-[8.5pt] leading-snug mb-2">
+    SecureCentral is an Australian supplier. Indonesian withholding tax and VAT treatment, and any benefit under the Indonesia-Australia Double Taxation Agreement, depend on the information below. Incorrect or incomplete tax data may result in gross-up of invoices.
+  </p>
+
+  <div class="grid grid-cols-4 gap-3 mb-2">
+    <div>
+      <label class="field-label">Country of tax residency <span class="req">*</span></label>
+      <input type="text" class="sc-input" value="Indonesia">
+    </div>
+    <div>
+      <label class="field-label">NPWP (Tax ID) <span class="req">*</span></label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">NPWP registration date</label>
+      <input type="date" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Tax office (KPP terdaftar)</label>
+      <input type="text" class="sc-input">
+    </div>
+  </div>
+
+  <div class="mb-2">
+    <span class="field-label">VAT / PPN status</span>
+    <div class="flex gap-5 text-[9pt] mt-0.5">
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> PKP (VAT-registered / Pengusaha Kena Pajak)</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Non-PKP</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Application in progress</label>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-3 mb-2">
+    <div>
+      <label class="field-label">NPPKP / SPPKP number & date (Jika PKP)</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">e-Faktur / tax invoice email <span class="req">*</span></label>
+      <input type="email" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Applicable VAT rate acknowledged</label>
+      <input type="text" class="sc-input" value="11%">
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="field-label">Registered tax address (if different from Section B)</label>
+    <textarea class="sc-input" rows="2"></textarea>
+  </div>
+
+  <!-- E1 -->
+  <div class="subsection">E1. Withholding tax & treaty position <span class="id">/ Pemotongan PPh & Fasilitas P3B</span></div>
+
+  <div class="mb-2">
+    <span class="field-label">Will your company withhold Indonesian tax (PPh 23 / PPh 26) on payments to SecureCentral?</span>
+    <div class="flex gap-5 text-[9pt] mt-0.5 flex-wrap">
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> No / Tidak</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Yes - PPh 23</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Yes - PPh 26</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> To be confirmed</label>
+    </div>
+  </div>
+
+  <div class="mb-2">
+    <span class="field-label">If withholding applies, will you claim treaty relief under the Indonesia-Australia DTA using Form DGT / SKD?</span>
+    <div class="flex gap-5 text-[9pt] mt-0.5 flex-wrap">
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Not applicable</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Yes - DGT Form will be provided</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> No</label>
+    </div>
+  </div>
+
+  <p class="text-[8pt] italic text-sc-gray mb-2 leading-snug">
+    Where tax is withheld, the reseller must provide the Bukti Potong (withholding tax slip) to SecureCentral within 30 days of payment. Unless valid documentation is provided, invoiced amounts are payable in full without deduction.
+  </p>
+
+  <div class="grid grid-cols-3 gap-3 mb-3">
+    <div>
+      <label class="field-label">Person responsible for tax matters (Nama PIC pajak)</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Email</label>
+      <input type="email" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Phone</label>
+      <input type="tel" class="sc-input">
+    </div>
+  </div>
+
+  <!-- E2 -->
+  <div class="subsection">E2. Other tax residencies / self-certification (CRS & FATCA)</div>
+
+  <div class="page-footer">
+    <div class="row1">
+      <span>SecureCentral Global Pty Ltd | ABN 45 690 139 872 | ACN 690 139 872 | partner@securecentral.net | www.securecentral.net</span>
+      <span>Page 2</span>
+    </div>
+    <div class="row2">Reseller Application - Indonesia | Form SC-RSL-ID v1.0 | Confidential when completed</div>
+  </div>
+</div>
+
+<!-- ============ PAGE 3 ============ -->
+<div class="page">
+  <p class="text-[8.5pt] italic text-sc-gray mb-2">Continuation of E2. Other tax residencies / self-certification (CRS & FATCA)</p>
+
+  <table class="sc-table mb-3">
+    <thead>
+      <tr>
+        <th style="width:35%">Country / jurisdiction of tax residency</th>
+        <th style="width:30%">Tax Identification Number (TIN)</th>
+        <th style="width:35%">If no TIN available, state reason (A / B / C)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+      <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+    </tbody>
+  </table>
+
+  <div class="mb-3">
+    <span class="field-label">Is the entity a US person for FATCA purposes?</span>
+    <div class="flex gap-5 text-[9pt] mt-0.5">
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> No / Tidak</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Yes - W-9 attached</label>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-3 mb-3">
+    <div>
+      <label class="field-label">GIIN (if a Financial Institution)</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <span class="field-label">Entity classification for CRS</span>
+      <div class="flex gap-4 text-[9pt] mt-0.5">
+        <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Active NFE</label>
+        <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Passive NFE</label>
+        <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> FI</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="declaration-box">
+    <div class="font-bold text-[9.5pt] mb-1">Tax declaration <span class="italic text-sc-gray font-normal">/ Pernyataan Perpajakan</span></div>
+    <p class="text-[8.5pt] leading-snug">
+      The applicant certifies that the tax residency, NPWP and TIN details above are true, correct and complete, and undertakes to notify SecureCentral in writing within 30 days of any change in circumstances that affects its tax residency or VAT status.
+    </p>
+    <p class="text-[8.5pt] italic text-sc-gray leading-snug mt-1">
+      Pemohon menyatakan bahwa data perpajakan di atas benar dan akan memberitahukan setiap perubahan dalam 30 hari.
+    </p>
+  </div>
+
+  <!-- Section F -->
+  <div class="section-header mt-3">
+    <div class="section-badge">F</div>
+    <div class="section-title">
+      <span class="en">BANKING & FINANCIAL INFORMATION</span>
+      <span class="id">Informasi Bank & Keuangan</span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-3 mb-2">
+    <div>
+      <label class="field-label">Bank name (Nama bank)</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Branch / KCP</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Account name (Nama rekening)</label>
+      <input type="text" class="sc-input">
+    </div>
+  </div>
+
+  <div class="grid grid-cols-4 gap-3 mb-2">
+    <div>
+      <label class="field-label">Account number (No. rekening)</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">SWIFT / BIC</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Account currency</label>
+      <input type="text" class="sc-input" value="IDR">
+    </div>
+    <div>
+      <label class="field-label">Preferred invoicing currency</label>
+      <input type="text" class="sc-input" value="IDR">
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-3 mb-2">
+    <div>
+      <label class="field-label">Annual revenue - last financial year</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Audited financial statements available? (Ya/Tidak)</label>
+      <select class="sc-input">
+        <option value=""></option>
+        <option value="ya">Ya</option>
+        <option value="tidak">Tidak</option>
+      </select>
+    </div>
+    <div>
+      <label class="field-label">Credit limit requested (Plafon kredit diminta)</label>
+      <input type="text" class="sc-input">
+    </div>
+  </div>
+
+  <div class="mb-2">
+    <span class="field-label">Payment terms requested / Termin pembayaran</span>
+    <div class="flex gap-4 text-[9pt] mt-0.5 flex-wrap">
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Prepayment (100% in advance)</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Net 7 days (standard)</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Net 14 days</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Net 30 days (subject to credit assessment)</label>
+    </div>
+  </div>
+
+  <p class="text-[8pt] italic text-sc-gray leading-snug">
+    SecureCentral's standard payment term is 7 days from invoice date. Any extended terms are granted at SecureCentral's sole discretion, in writing, and may require audited financials, a bank guarantee or a director's personal guarantee.
+  </p>
+
+  <div class="page-footer">
+    <div class="row1">
+      <span>SecureCentral Global Pty Ltd | ABN 45 690 139 872 | ACN 690 139 872 | partner@securecentral.net | www.securecentral.net</span>
+      <span>Page 3</span>
+    </div>
+    <div class="row2">Reseller Application - Indonesia | Form SC-RSL-ID v1.0 | Confidential when completed</div>
+  </div>
+</div>
+
+<!-- ============ PAGE 4 ============ -->
+<div class="page">
+  <div class="subsection">F1. Accounts payable contact <span class="id">/ Kontak Bagian Keuangan</span></div>
+
+  <div class="grid grid-cols-3 gap-3 mb-4">
+    <div>
+      <label class="field-label">Name</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Email</label>
+      <input type="email" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Phone</label>
+      <input type="tel" class="sc-input">
+    </div>
+  </div>
+
+  <!-- Section G -->
+  <div class="section-header">
+    <div class="section-badge">G</div>
+    <div class="section-title">
+      <span class="en">BUSINESS PROFILE & CAPABILITY</span>
+      <span class="id">Profil Bisnis & Kapabilitas</span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-5 gap-2 mb-3">
+    <div>
+      <label class="field-label">Primary business model</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Years trading in IT</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Total staff</label>
+      <input type="number" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Pre-sales / technical staff</label>
+      <input type="number" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Support staff</label>
+      <input type="number" class="sc-input">
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <span class="field-label">Target market segments <span class="italic text-sc-gray-light">/ Segmen pasar</span></span>
+    <div class="grid grid-cols-3 gap-x-4 gap-y-1 text-[9pt] mt-1">
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Enterprise</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Banking & Finance</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Telco / ISP</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Mid-market</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Manufacturing</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Retail & FMCG</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> SMB / UKM</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Healthcare</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Mining & Energy</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Government / BUMN</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Education</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Other</label>
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <span class="field-label">Geographic coverage <span class="italic text-sc-gray-light">/ Cakupan wilayah</span></span>
+    <div class="grid grid-cols-3 gap-x-4 gap-y-1 text-[9pt] mt-1">
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Jabodetabek</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Sumatra</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Papua & Maluku</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> West Java</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Bali & Nusa Tenggara</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> National</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Central Java & DIY</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Kalimantan</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Regional (ASEAN)</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> East Java</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Sulawesi</label>
+      <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> Other</label>
+    </div>
+  </div>
+
+  <!-- G1 -->
+  <div class="subsection">G1. 12-month business plan <span class="id">/ Rencana Bisnis 12 Bulan</span></div>
+
+  <div class="page-footer">
+    <div class="row1">
+      <span>SecureCentral Global Pty Ltd | ABN 45 690 139 872 | ACN 690 139 872 | partner@securecentral.net | www.securecentral.net</span>
+      <span>Page 4</span>
+    </div>
+    <div class="row2">Reseller Application - Indonesia | Form SC-RSL-ID v1.0 | Confidential when completed</div>
+  </div>
+</div>
+
+<!-- ============ PAGE 5 ============ -->
+<div class="page">
+  <p class="text-[8.5pt] italic text-sc-gray mb-2">Continuation of G1. 12-month business plan</p>
+
+  <div x-data="{ rows: [{},{},{}] }">
+    <table class="sc-table mb-1">
+      <thead>
+        <tr>
+          <th style="width:25%">Solution line</th>
+          <th style="width:15%">Target customers (no.)</th>
+          <th style="width:20%">Forecast Year 1 (USD)</th>
+          <th style="width:40%">Named opportunities / pipeline</th>
+        </tr>
+      </thead>
+      <tbody>
+        <template x-for="(row, idx) in rows" :key="idx">
+          <tr>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+    <button type="button" class="add-row-btn no-print" @click="rows.push({})">+ Add row</button>
+  </div>
+
+  <div class="mt-3 mb-2">
+    <label class="field-label">Key vendor accreditations / certifications held (mis. NSE, CCNA, ITIL, ISO 27001)</label>
+    <textarea class="sc-input" rows="2"></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label class="field-label">Existing distributors / principals you work with (Distributor saat ini)</label>
+    <textarea class="sc-input" rows="2"></textarea>
+  </div>
+
+  <div class="mb-4">
+    <span class="field-label">Top 5 reference customers (names or industry + size)</span>
+    <div class="space-y-1 mt-1">
+      <div class="flex items-center gap-2">
+        <span class="text-[8.5pt] text-sc-gray w-4 flex-shrink-0">1.</span>
+        <input type="text" class="sc-input">
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-[8.5pt] text-sc-gray w-4 flex-shrink-0">2.</span>
+        <input type="text" class="sc-input">
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-[8.5pt] text-sc-gray w-4 flex-shrink-0">3.</span>
+        <input type="text" class="sc-input">
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-[8.5pt] text-sc-gray w-4 flex-shrink-0">4.</span>
+        <input type="text" class="sc-input">
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-[8.5pt] text-sc-gray w-4 flex-shrink-0">5.</span>
+        <input type="text" class="sc-input">
+      </div>
+    </div>
+  </div>
+
+  <!-- Section H -->
+  <div class="section-header">
+    <div class="section-badge">H</div>
+    <div class="section-title">
+      <span class="en">KEY CONTACTS</span>
+      <span class="id">Kontak Utama</span>
+    </div>
+  </div>
+
+  <div class="subsection">H1. Nominated contacts <span class="id">/ Kontak yang ditunjuk</span></div>
+
+  <p class="text-[8.5pt] italic text-sc-gray mb-1">
+    Suggested roles: Authorised signatory / Direktur, Sales lead, Technical / pre-sales lead, Support escalation, Accounts payable, Marketing.
+  </p>
+
+  <div x-data="{ rows: [{},{},{},{},{}] }">
+    <table class="sc-table mb-1">
+      <thead>
+        <tr>
+          <th style="width:18%">Role</th>
+          <th style="width:22%">Full name</th>
+          <th style="width:18%">Job title</th>
+          <th style="width:22%">Email</th>
+          <th style="width:20%">Mobile / WhatsApp</th>
+        </tr>
+      </thead>
+      <tbody>
+        <template x-for="(row, idx) in rows" :key="idx">
+          <tr>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="email"></td>
+            <td><input type="tel"></td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+    <button type="button" class="add-row-btn no-print" @click="rows.push({})">+ Add row</button>
+  </div>
+
+  <div class="subsection mt-3">H2. Trade references <span class="id">/ Referensi Dagang</span></div>
+
+  <div x-data="{ rows: [{},{},{}] }">
+    <table class="sc-table mb-1">
+      <thead>
+        <tr>
+          <th style="width:25%">Company name</th>
+          <th style="width:20%">Contact person</th>
+          <th style="width:25%">Email / phone</th>
+          <th style="width:30%">Relationship & years</th>
+        </tr>
+      </thead>
+      <tbody>
+        <template x-for="(row, idx) in rows" :key="idx">
+          <tr>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+          </tr>
+        </template>
+      </tbody>
+    </table>
+    <button type="button" class="add-row-btn no-print" @click="rows.push({})">+ Add row</button>
+  </div>
+
+  <!-- Section I -->
+  <div class="section-header mt-3">
+    <div class="section-badge">I</div>
+    <div class="section-title">
+      <span class="en">ADDITIONAL NOTES</span>
+      <span class="id">Keterangan Tambahan</span>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="row1">
+      <span>SecureCentral Global Pty Ltd | ABN 45 690 139 872 | ACN 690 139 872 | partner@securecentral.net | www.securecentral.net</span>
+      <span>Page 5</span>
+    </div>
+    <div class="row2">Reseller Application - Indonesia | Form SC-RSL-ID v1.0 | Confidential when completed</div>
+  </div>
+</div>
+
+<!-- ============ PAGE 6 ============ -->
+<div class="page">
+  <p class="text-[8.5pt] italic text-sc-gray mb-2">Continuation of I. Additional Notes</p>
+
+  <div class="mb-4">
+    <label class="field-label">Anything else you would like SecureCentral to know (Keterangan)</label>
+    <textarea class="sc-input" rows="3"></textarea>
+  </div>
+
+  <!-- Section J -->
+  <div class="section-header">
+    <div class="section-badge">J</div>
+    <div class="section-title">
+      <span class="en">TERMS & CONDITIONS OF DOING BUSINESS WITH SECURECENTRAL</span>
+      <span class="id">Syarat & Ketentuan</span>
+    </div>
+  </div>
+
+  <p class="text-[8.5pt] mb-2 leading-snug">
+    Reproduced from www.securecentral.net/terms-conditions. These terms govern all transactions with SecureCentral, including quotes, invoices and payments, and are supplemented by the Indonesia-specific provisions at clause 13.
+  </p>
+
+  <div class="text-[8.5pt] leading-snug">
+    <div class="clause"><span class="num">1. Definitions.</span> <em>SecureCentral:</em> SecureCentral Global Pty Ltd, the supplier of the goods and/or services. <em>Client:</em> the individual or entity receiving a quote, invoice, products or services. For this application, "Client" includes the reseller applicant.</div>
+
+    <div class="clause"><span class="num">2. General.</span> These Terms & Conditions apply to all transactions with SecureCentral, including quotes, invoices and payments. By engaging with SecureCentral, the Client agrees to these terms.</div>
+
+    <div class="clause"><span class="num">3. Quotes.</span> Quotes are valid for 30 days unless otherwise specified. Prices and availability are subject to change after the validity period. Acceptance of a quote must be confirmed in writing via email or purchase order.</div>
+
+    <div class="clause"><span class="num">4. Orders and delivery.</span> All orders are subject to availability. Delivery timelines are estimates and may be affected by factors beyond SecureCentral's control. Risk in goods passes to the Client upon delivery, but ownership remains with SecureCentral until payment is made in full.</div>
+
+    <div class="clause"><span class="num">5. Invoices and payment terms.</span> Invoices must be paid within 7 days unless otherwise agreed in writing. Payments must be made via EFT or another agreed method. Late payments may incur a 2% monthly interest charge on outstanding balances.</div>
+
+    <div class="clause"><span class="num">6. Cancellations and refunds.</span> Orders may be cancelled in writing before goods are dispatched. Custom or non-stock orders may incur cancellation fees. Refunds are provided only in accordance with Australian Consumer Law.</div>
+
+    <div class="clause"><span class="num">7. Warranty and returns.</span> Goods and services are warranted as per Australian Consumer Law. Warranty claims must include proof of purchase and be submitted within the applicable warranty period.</div>
+
+    <div class="clause"><span class="num">8. Limitation of liability.</span> SecureCentral is not liable for indirect or consequential damages. Total liability is limited to the value of goods or services provided.</div>
+
+    <div class="clause"><span class="num">9. Confidentiality.</span> Both parties agree to keep all business terms and related information confidential unless disclosure is required by law.</div>
+
+    <div class="clause"><span class="num">10. Governing law and dispute resolution.</span> These Terms & Conditions are governed by the laws of the State of NSW, Australia. Disputes must first be resolved through negotiation or mediation before escalating to legal proceedings.</div>
+
+    <div class="clause"><span class="num">11. Force majeure.</span> SecureCentral is not responsible for failure to fulfil obligations due to events beyond its reasonable control, including but not limited to natural disasters, strikes or government restrictions.</div>
+
+    <div class="clause"><span class="num">12. Amendments.</span> SecureCentral reserves the right to amend these Terms & Conditions. Clients will be notified of any changes affecting ongoing agreements.</div>
+
+    <div class="clause">
+      <span class="num">13. Indonesia-specific provisions (supplementary).</span>
+      <div class="mt-1 pl-3 space-y-0.5">
+        <div>(a) Appointment as a reseller is non-exclusive, non-transferable and confers no territorial exclusivity unless granted in a separate written agreement.</div>
+        <div>(b) The reseller purchases in its own name and on its own account and is not an agent, employee or legal representative of SecureCentral or its vendors.</div>
+        <div>(c) Where Indonesian withholding tax applies, the reseller must provide the Bukti Potong within 30 days of payment; without valid documentation invoiced amounts are payable in full.</div>
+        <div>(d) Indonesian VAT (PPN), import duty, customs charges and bank transfer fees are for the reseller's account.</div>
+        <div>(e) The reseller must comply with UU No. 27/2022 on Personal Data Protection and with all vendor end-user licence agreements and deal-registration rules.</div>
+        <div>(f) SecureCentral may suspend or terminate the appointment on 30 days' written notice, or immediately for insolvency, breach of clauses 9 or 13(e), sanctions exposure or reputational risk.</div>
+        <div>(g) Software licences and subscriptions are non-returnable and non-refundable once activated by the vendor.</div>
+        <div>(h) Use of SecureCentral or vendor trademarks and logos requires prior written approval and must cease on termination.</div>
+        <div>(i) This form and any resulting agreement are executed in English; any Indonesian translation is for convenience only and the English version prevails to the extent permitted by law.</div>
+        <div>(j) Personal information collected in this form is handled in accordance with the SecureCentral Privacy Policy (www.securecentral.net/privacy-policy) and may be transferred to Australia, Singapore, Malaysia or vendor systems for assessment and onboarding.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subsection mt-3">Contact</div>
+  <p class="text-[8.5pt] leading-snug">
+    SecureCentral Global Pty Ltd, ABN 45 690 139 872 / ACN 690 139 872. Email: <span class="text-sc-red font-semibold">partner@securecentral.net</span>. By transacting with SecureCentral, the Client confirms acceptance of these Terms & Conditions.
+  </p>
+
+  <div class="page-footer">
+    <div class="row1">
+      <span>SecureCentral Global Pty Ltd | ABN 45 690 139 872 | ACN 690 139 872 | partner@securecentral.net | www.securecentral.net</span>
+      <span>Page 6</span>
+    </div>
+    <div class="row2">Reseller Application - Indonesia | Form SC-RSL-ID v1.0 | Confidential when completed</div>
+  </div>
+</div>
+
+<!-- ============ PAGE 7 ============ -->
+<div class="page">
+  <!-- Section K -->
+  <div class="section-header">
+    <div class="section-badge">K</div>
+    <div class="section-title">
+      <span class="en">DECLARATION & AUTHORISED SIGNATURE</span>
+      <span class="id">Pernyataan & Tanda Tangan</span>
+    </div>
+  </div>
+
+  <div class="declaration-box">
+    <div class="font-bold text-[9.5pt] mb-1">Declaration <span class="italic text-sc-gray font-normal">/ Pernyataan</span></div>
+    <p class="text-[8.5pt] leading-snug">
+      I, the undersigned, declare that I am duly authorised to sign on behalf of the applicant company; that all information and documents provided in this application are true, accurate and complete; and that the applicant accepts the SecureCentral Terms & Conditions of doing business set out in Section J, including the Indonesia-specific provisions. I consent to SecureCentral conducting credit, tax-status and reference checks, and to the handling of personal data in accordance with the SecureCentral Privacy Policy.
+    </p>
+    <p class="text-[8.5pt] italic text-sc-gray leading-snug mt-1">
+      Saya menyatakan bahwa seluruh informasi dalam formulir ini benar dan lengkap, dan menyetujui Syarat & Ketentuan SecureCentral.
+    </p>
+  </div>
+
+  <div class="mb-4 space-y-1.5">
+    <label class="flex items-start gap-2 text-[9pt]">
+      <input type="checkbox" class="sc-check mt-0.5" required>
+      <span>I have read, understood and accept the SecureCentral Terms & Conditions (Section J). <em class="text-sc-gray">/ Saya telah membaca dan menyetujui Syarat & Ketentuan SecureCentral.</em></span>
+    </label>
+    <label class="flex items-start gap-2 text-[9pt]">
+      <input type="checkbox" class="sc-check mt-0.5" required>
+      <span>I consent to SecureCentral carrying out credit and trade reference checks.</span>
+    </label>
+  </div>
+
+  <div class="grid grid-cols-3 gap-3 mb-2">
+    <div>
+      <label class="field-label">Full name of authorised signatory <span class="req">*</span> (Nama lengkap)</label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Position / Jabatan <span class="req">*</span></label>
+      <input type="text" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">NIK / Passport No.</label>
+      <input type="text" class="sc-input">
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-3 mb-4">
+    <div>
+      <label class="field-label">Email <span class="req">*</span></label>
+      <input type="email" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Mobile / WhatsApp</label>
+      <input type="tel" class="sc-input">
+    </div>
+    <div>
+      <label class="field-label">Place & date / Tempat & tanggal <span class="req">*</span></label>
+      <input type="text" class="sc-input">
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4 mb-2">
+    <div>
+      <div class="field-label mb-1">SIGNATURE / TANDA TANGAN</div>
+      <div class="signature-box">
+        <span>Type your name to sign electronically, or print and sign by hand.</span>
+      </div>
+    </div>
+    <div>
+      <div class="field-label mb-1">COMPANY STAMP / CAP PERUSAHAAN + MATERAI Rp10.000</div>
+      <div class="signature-box">
+        <span>Affix company stamp and Rp10.000 duty stamp here.</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="text-[8pt] italic text-sc-gray leading-snug mb-4">
+    Type your name to sign electronically, or print and sign by hand. Affix company stamp and Rp10.000 duty stamp on the printed copy.
+  </p>
+
+  <!-- Internal use -->
+  <div class="internal-use">
+    <div class="internal-use-title">SecureCentral internal use only</div>
+    <div class="grid grid-cols-2 gap-3 text-[9pt]">
+      <div>
+        <label class="field-label">Received by:</label>
+        <input type="text" class="sc-input" style="background:white">
+      </div>
+      <div>
+        <label class="field-label">Date:</label>
+        <input type="date" class="sc-input" style="background:white">
+      </div>
+      <div>
+        <label class="field-label">Credit check:</label>
+        <div class="flex gap-4 mt-1">
+          <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> PASS</label>
+          <label class="flex items-center gap-1.5"><input type="checkbox" class="sc-check"> FAIL</label>
+        </div>
+      </div>
+      <div>
+        <label class="field-label">Tier approved:</label>
+        <input type="text" class="sc-input" style="background:white">
+      </div>
+      <div>
+        <label class="field-label">Partner ID:</label>
+        <input type="text" class="sc-input" style="background:white">
+      </div>
+      <div>
+        <label class="field-label">Approved by:</label>
+        <input type="text" class="sc-input" style="background:white">
+      </div>
+      <div>
+        <label class="field-label">Date:</label>
+        <input type="date" class="sc-input" style="background:white">
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="row1">
+      <span>SecureCentral Global Pty Ltd | ABN 45 690 139 872 | ACN 690 139 872 | partner@securecentral.net | www.securecentral.net</span>
+      <span>Page 7</span>
+    </div>
+    <div class="row2">Reseller Application - Indonesia | Form SC-RSL-ID v1.0 | Confidential when completed</div>
+  </div>
+</div>
+
+</body>
+</html>
